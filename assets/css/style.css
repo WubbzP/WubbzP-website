@@ -7,12 +7,6 @@
   size-adjust: 125%;
   font-display: swap;
 }
-/* WubbzP's Wubbzy Logo fonts. All four share the same spacing, so stacked
-   layers line up exactly (see .wl below). */
-@font-face { font-family: "Wubbzy Logo"; src: url("/assets/fonts/wubbzy-logo.ttf") format("truetype"); ascent-override: 80%; descent-override: 34%; line-gap-override: 0%; font-display: block; }
-@font-face { font-family: "Wubbzy Logo Shine"; src: url("/assets/fonts/wubbzy-logo-shine.ttf") format("truetype"); ascent-override: 80%; descent-override: 34%; line-gap-override: 0%; font-display: block; }
-@font-face { font-family: "Wubbzy Logo Outline"; src: url("/assets/fonts/wubbzy-logo-outline.ttf") format("truetype"); ascent-override: 80%; descent-override: 34%; line-gap-override: 0%; font-display: block; }
-@font-face { font-family: "Wubbzy Logo Sticker"; src: url("/assets/fonts/wubbzy-logo-sticker.ttf") format("truetype"); ascent-override: 80%; descent-override: 34%; line-gap-override: 0%; font-display: block; }
 @font-face {
   font-family: "VAG Rounded";
   src: url("/assets/fonts/vag-rounded.ttf") format("truetype");
@@ -134,41 +128,9 @@ img { max-width: 100%; }
   transition: transform 0.15s;
 }
 .logo:hover { transform: rotate(0deg) scale(1.03); }
-/* ---------- Wubbzy Logo lettering ----------
-   Built like WubbzP's Photoshop guide: from the bottom, an optional white
-   sticker edge, the outline font in the outline colour, the plain font in
-   the shine tint, and the shine font (highlights cut out) in the fill. */
-.wl {
-  display: inline-grid;
-  font-weight: normal;
-  line-height: 1;
-  white-space: pre;
-  -webkit-text-stroke: 0;
-  text-shadow: none;
-}
-.wl > span { grid-area: 1 / 1; }
-.wl { align-items: baseline; } /* keep every layer on the same baseline */
-.wl-k { font-family: "Wubbzy Logo Sticker", "House Holiday Sans", cursive; color: #ffffff; }
-.wl-o { font-family: "Wubbzy Logo Outline", "House Holiday Sans", cursive; color: var(--wl-outline); }
-.wl-t { font-family: "Wubbzy Logo", "House Holiday Sans", cursive; color: var(--wl-shine); }
-.wl-f { font-family: "Wubbzy Logo Shine", "House Holiday Sans", cursive; color: var(--wl-fill); }
-/* colour schemes from the guide */
-.wl-green { --wl-fill: #A8D474; --wl-shine: #DEEFBE; --wl-outline: #089C4C; }
-.wl-blue { --wl-fill: #7CD0EC; --wl-shine: #CCF2FC; --wl-outline: #0C80B4; }
-.wl-yellow { --wl-fill: #F8E888; --wl-shine: #FCF6D2; --wl-outline: #A37E0A; }
-.wl-pink { --wl-fill: #F8BCE4; --wl-shine: #FCE6F5; --wl-outline: #A30A7F; }
-.wl-mint { --wl-fill: #BCFCE0; --wl-shine: #E6FEF3; --wl-outline: #0AA36F; }
-.wl-purple { --wl-fill: #C4A0D8; --wl-shine: #E9DBF0; --wl-outline: #5D0AA3; }
-
-.logo-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 0;
-  filter: drop-shadow(0 4px 0 rgba(0,0,0,0.18));
-}
-.logo-text .wl-blue { font-size: 30px; margin-bottom: -2px; }
-.logo-text .wl-green { font-size: 56px; }
+/* The logo lettering is one image, rendered from WubbzP's Wubbzy Logo fonts
+   with the Photoshop guide's layers (sticker, outline, shine tint, fill). */
+.logo-img { display: block; width: 217px; height: auto; }
 
 /* Purple ribbon navigation */
 .ribbon {
@@ -1364,6 +1326,34 @@ cite:lang(ja), cite :lang(ja) { font-style: normal; }
 .panel .after-cards { margin: 14px 0 0; }
 .cards-2 { grid-template-columns: repeat(2, 1fr); }
 
+/* Video settings page */
+.stage-admin { grid-template-columns: 1fr; }
+.admin-video { margin: 0 0 10px; max-width: 560px; }
+.admin-current { font-size: 13px; overflow-wrap: anywhere; }
+.admin-label {
+  display: block;
+  font-family: "House Holiday Sans", cursive;
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.admin-input {
+  width: 100%;
+  max-width: 560px;
+  font: inherit;
+  font-size: 15px;
+  padding: 8px 12px;
+  border: 3px solid var(--orange-frame);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--ink);
+}
+.admin-input:focus-visible { outline: 4px solid var(--frame); outline-offset: 2px; }
+.admin-input[aria-invalid="true"] { border-color: var(--red-text); }
+.admin-steps { margin: 0 0 10px; padding-left: 22px; }
+.admin-steps li { margin-bottom: 4px; }
+.cream-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* Contact */
 .email-big {
   display: inline-block;
@@ -1459,8 +1449,7 @@ cite:lang(ja), cite :lang(ja) { font-style: normal; }
 
 @media (max-width: 520px) {
   .site { padding: 12px 10px 24px; }
-  .logo-text .wl-blue { font-size: 23px; }
-  .logo-text .wl-green { font-size: 42px; }
+  .logo-img { width: 165px; }
   .ribbon ul { padding: 6px 14px 8px; }
   .ribbon a { font-size: 21px; }
   .stage { border-width: 6px; }

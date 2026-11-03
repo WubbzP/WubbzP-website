@@ -143,6 +143,75 @@
     });
   }
 
+  // Featured video: the link lives in /assets/data/video.json so it can be
+  // changed from the Video Settings page (/admin/) without editing any page.
+  function youtubeId(text) {
+    text = String(text || "").trim();
+    if (/^[\w-]{11}$/.test(text)) return text;
+    var m = text.match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([\w-]{11})/i);
+    return m ? m[1] : null;
+  }
+  function embedUrl(id) { return "https://www.youtube-nocookie.com/embed/" + id; }
+  function loadVideoSetting() {
+    return fetch("/assets/data/video.json", { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (data) { return youtubeId(data.youtube); });
+  }
+
+  var featured = document.getElementById("featured-video");
+  if (featured) {
+    loadVideoSetting().then(function (id) {
+      if (id && featured.src.indexOf("/embed/" + id) === -1) featured.src = embedUrl(id);
+    }).catch(function () {});
+  }
+
+  // Video Settings page: preview a link and download the new video.json
+  var adminForm = document.getElementById("admin-form");
+  if (adminForm) {
+    var input = document.getElementById("admin-url");
+    var preview = document.getElementById("admin-preview");
+    var currentLink = document.getElementById("admin-current-link");
+    var download = document.getElementById("admin-download");
+    var adminStatus = document.getElementById("admin-status");
+    var picked = null;
+    var showCurrent = function (id) {
+      var url = "https://www.youtube.com/watch?v=" + id;
+      currentLink.href = url;
+      currentLink.textContent = url;
+      preview.src = embedUrl(id);
+    };
+    loadVideoSetting().then(function (id) { if (id) showCurrent(id); }).catch(function () {});
+
+    adminForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var id = youtubeId(input.value);
+      if (!id) {
+        picked = null;
+        download.disabled = true;
+        input.setAttribute("aria-invalid", "true");
+        adminStatus.textContent = "That doesn't look like a YouTube video link.";
+        return;
+      }
+      picked = id;
+      input.removeAttribute("aria-invalid");
+      preview.src = embedUrl(id);
+      download.disabled = false;
+      adminStatus.textContent = "Previewing the new video. Download video.json to publish it.";
+    });
+    input.addEventListener("input", function () { download.disabled = true; });
+    download.addEventListener("click", function () {
+      if (!picked) return;
+      var json = JSON.stringify({ youtube: "https://www.youtube.com/watch?v=" + picked }, null, 2) + "\n";
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+      a.download = "video.json";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      adminStatus.textContent = "Downloaded! Upload it as assets/data/video.json.";
+    });
+  }
+
   // Visitor counter (Abacus, a free counting API). Each browser session is
   // counted once; later page views in the same session only read the total.
   var counter = document.getElementById("counter");
