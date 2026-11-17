@@ -119,18 +119,18 @@ img { max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--logo-bg);
-  border: 5px solid var(--frame-light);
-  border-radius: 22px;
-  padding: 8px 14px;
-  box-shadow: 0 5px 0 var(--frame-dark);
   transform: rotate(-2deg);
   transition: transform 0.15s;
 }
 .logo:hover { transform: rotate(0deg) scale(1.03); }
-/* The logo lettering is one image, rendered from WubbzP's Wubbzy Logo fonts
-   with the Photoshop guide's layers (sticker, outline, shine tint, fill). */
-.logo-img { display: block; width: 217px; height: auto; }
+/* The logo is one image with its own purple backdrop and Wubbzy figure,
+   so the link itself has no box around it. */
+.logo-img {
+  display: block;
+  width: 240px;
+  height: auto;
+  filter: drop-shadow(0 4px 0 var(--frame-dark));
+}
 
 /* Purple ribbon navigation */
 .ribbon {
